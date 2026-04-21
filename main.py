@@ -4,7 +4,6 @@ import imageio
 import time
 
 
-# -------- MediaPipe --------
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
     max_num_hands=2,
@@ -13,12 +12,11 @@ hands = mp_hands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-# -------- Cargar GIF --------
-gif = imageio.mimread(r"C:\Users\GN384FZ\Documents\ProyectoPersonal\ScubaCat\assets\scuba-cat.gif")
+gif = imageio.mimread(r"path\assets\scuba-cat.gif")
 gif_index = 0
-gif_visible = False  # Controla si la ventana existe
+gif_visible = False 
 
-# -------- Cámara --------
+
 cap = cv2.VideoCapture(0)
 
 def dedo_arriba(lm, punta, base):
@@ -60,8 +58,7 @@ def mano_agitada(x_actual, umbral=0.03, max_frames=5):
     desplazamiento = max(historial_x) - min(historial_x)
     return desplazamiento > umbral
 
-
-# -------- Loop principal --------
+# Loop principal
 while True:
     ret, frame = cap.read()
     if not ret:
@@ -72,7 +69,6 @@ while True:
 
     tiempo_actual = time.time()
 
-    # Solo procesamos gestos si el GIF NO está activo
     if not gif_activo:
         resultado = hands.process(frame_rgb)
 
@@ -101,12 +97,11 @@ while True:
                     if mano_cerrada(lm):
                         mano_der_cerrada = True
 
-        # Si se cumple el gesto → activar GIF por 5 segundos
         if mano_izq_abierta_agitada and mano_der_cerrada:
             gif_activo = True
             gif_inicio = tiempo_actual
 
-    # -------- Mostrar GIF durante 5 segundos --------
+    # Mostrar GIF
     if gif_activo:
         gif_frame = gif[gif_index % len(gif)]
         gif_index += 1
@@ -116,19 +111,14 @@ while True:
 
         cv2.imshow("GIF", gif_frame)
 
-        # ¿Ya pasaron los 5 segundos?
         if tiempo_actual - gif_inicio >= DURACION_GIF:
             gif_activo = False
             cv2.destroyWindow("GIF")
 
-    # -------- Mostrar cámara --------
     cv2.imshow("Camara", frame)
 
-    # Salir con ESC
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
-
-# -------- Limpieza --------
 cap.release()
 cv2.destroyAllWindows()
