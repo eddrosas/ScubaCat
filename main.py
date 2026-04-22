@@ -3,6 +3,7 @@ import mediapipe as mp
 import imageio
 import time
 
+from pathlib import Path
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
@@ -12,7 +13,8 @@ hands = mp_hands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-gif = imageio.mimread(r"path\assets\scuba-cat.gif")
+gif_path = Path(".") / "assets" / "scuba-cat.gif"
+gif = imageio.mimread(gif_path)
 gif_index = 0
 gif_visible = False 
 

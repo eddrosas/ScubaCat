@@ -19,3 +19,21 @@ Algunas de las librerías utilizadas en el proyecto:
 - o generan excepciones de ejecución fuera de Python 3.10.
 
 Por esta razón, el branch `main` está **validado y soportado únicamente en Python 3.10**.
+
+## Ejemplo de uso
+
+Usando el gestor de proyectos **uv**:
+
+```bash
+# Instalar Python 3.10 si aún no está presente
+uv python install 3.10
+# Crear entorno virtual con esta versión
+uv venv --python 3.10
+# Activar el entorno
+source .venv/bin/activate # Linux
+.venv\Scripts\activate # Windows Powershell
+# Instalar dependencias
+uv pip install opencv-python mediapipe==0.10.21 imageio
+# Correr
+uv run main.py
+```
